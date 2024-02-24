@@ -1,0 +1,62 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Функция для сохранения заметки в файл
+void saveNoteToFile(const string& note, const string& filename) {
+    ofstream file(filename, ios::app);
+    if (file.is_open()) {
+        file << note << endl;
+        file.close();
+        cout << "Заметка сохранена в файле " << filename << endl;
+    } else {
+        cout << "Ошибка открытия файла " << filename << endl;
+    }
+}
+
+// Функция для чтения заметок из файла
+vector<string> readNotesFromFile(const string& filename) {
+    vector<string> notes;
+    ifstream file(filename);
+    if (file.is_open()) {
+        string line;
+        while (getline(file, line)) {
+            notes.push_back(line);
+        }
+        file.close();
+    } else {
+        cout << "Ошибка открытия файла " << filename << endl;
+    }
+    return notes;
+}
+
+int main() {
+    string filename;
+    cout << "Введите имя файла для сохранения заметок: ";
+    getline(cin, filename);
+
+    cout << "Введите 'q' для выхода." << endl;
+
+    while (true) {
+        string note;
+        cout << "Введите заметку: ";
+        getline(cin, note);
+
+        if (note == "q") {
+            break;
+        } 
+
+        saveNoteToFile(note, filename);
+    }
+
+    vector<string> notes = readNotesFromFile(filename);
+    cout << "Сохраненные заметки:" << endl;
+    for (const string& note : notes) {
+        cout << "- " << note << endl;
+    }
+
+    return 0;
+}
